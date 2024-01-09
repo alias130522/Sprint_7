@@ -1,16 +1,21 @@
 import random
+import allure
 import pytest
 import requests
 import string
-from data import url_courier_authorization
 
+
+
+@allure.step('создание нового курьера и внесение в список его данных')
 @pytest.fixture()
 def register_new_courier_and_return_login_password():
     """ создание нового курьера и внесение в список его данных """
+
     def generate_random_string(length):
         letters = string.ascii_lowercase
         random_string = ''.join(random.choice(letters) for i in range(length))
         return random_string
+
     login_pass = []
     login = generate_random_string(10)
     password = generate_random_string(10)
@@ -28,11 +33,12 @@ def register_new_courier_and_return_login_password():
 
     return login_pass
 
+
+@allure.step('авторизация курьера после его создания')
 @pytest.fixture()
 def courier_authorization(register_new_courier_and_return_login_password):
     """ авторизация курьера после его создания """
     payload = {"login": register_new_courier_and_return_login_password[0],
                "password": register_new_courier_and_return_login_password[1]}
-    response = requests.post(url_courier_authorization, data=payload)
+    response = requests.post('http://qa-scooter.praktikum-services.ru/api/v1/courier/login', data=payload)
     return response
-
