@@ -2,7 +2,7 @@ import random
 import pytest
 import requests
 import string
-import data
+from data import url_courier_authorization
 
 @pytest.fixture()
 def register_new_courier_and_return_login_password():
@@ -33,6 +33,6 @@ def courier_authorization(register_new_courier_and_return_login_password):
     """ авторизация курьера после его создания """
     payload = {"login": register_new_courier_and_return_login_password[0],
                "password": register_new_courier_and_return_login_password[1]}
-    response = requests.post(data.url_courier_authorization, data=payload)
+    response = requests.post(url_courier_authorization, data=payload)
     return response
 
